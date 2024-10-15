@@ -1,0 +1,35 @@
+{
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["node"],
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    		// Treat files as modules even if it doesn't use import/export
+		"moduleDetection": "force",
+
+		// Ignore module structure
+
+		// Allow JSON modules to be imported
+		"resolveJsonModule": true,
+
+		// Allow JS files to be imported from TS and vice versa
+		"allowJs": true,
+
+		// Use correct ESM import behavior
+
+		// Disallow features that require cross-file awareness
+		"isolatedModules": true,
+  }
+}
