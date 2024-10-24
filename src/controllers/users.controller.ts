@@ -174,7 +174,6 @@ export const updateUserFullName = async (
 
     res.status(200).json({
       msg: "Nombre de usuario actualizado correctamente",
-      fullName: req.body.fullName,
     });
   } catch (error) {
     res.status(500).json({ msg: "No se pudo actualizar el usuario", error });
@@ -199,7 +198,6 @@ export const updateUserRole = async (
 
     res.status(200).json({
       msg: "Rol del usuario actualizado correctamente",
-      id_role: req.body.id_role,
     });
   } catch (error) {
     res.status(500).json({ msg: "No se pudo actualizar el usuario", error });
