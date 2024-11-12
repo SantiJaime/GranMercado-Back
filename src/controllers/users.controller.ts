@@ -1,18 +1,20 @@
 import type { Request, Response } from "express";
 import type { RowDataPacket } from "mysql2";
-import dbConnection from "../database/db.config";
+import type { Secret } from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
 import { generateToken, verifyToken } from "../middleware/jwt.config";
 import { JWT_SECRET_KEY } from "../constants/const";
-import type { Secret } from "jsonwebtoken";
+import connectToDatabase from "../database/db.config";
+
+const db = await connectToDatabase();
 
 export const getAllUsers = async (
   _req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const [allUsers] = await dbConnection.query(
+    const [allUsers] = await db.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.fullName, ur.name_role AS role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role)"
     );
     res
@@ -34,7 +36,7 @@ export const getOneUser = async (
     return;
   }
   try {
-    const [oneUser] = await dbConnection.query<RowDataPacket[]>(
+    const [oneUser] = await db.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.fullName, ur.name_role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role) WHERE id = ?",
       [req.params.id]
     );
@@ -42,7 +44,7 @@ export const getOneUser = async (
       res.status(404).json({ msg: "No se pudo encontrar el usuario" });
       return;
     }
-    res.status(200).json({ msg: "Usuario encontrado", oneUser });
+    res.status(200).json({ msg: "Usuario encontrado", user: oneUser[0] });
   } catch (error) {
     res.status(500).json({ msg: "No se pudo encontrar el usuario", error });
   }
@@ -63,7 +65,7 @@ export const createUser = async (
 
     const roleId: number = id_role ? id_role : 1;
 
-    const [userExist] = await dbConnection.query<RowDataPacket[]>(
+    const [userExist] = await db.query<RowDataPacket[]>(
       "SELECT * FROM user WHERE email = ?",
       [email]
     );
@@ -75,7 +77,7 @@ export const createUser = async (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await dbConnection.query(
+    await db.query(
       "INSERT INTO user (email, fullName, password, id_role) VALUES (?, ?, ?, ?)",
       [email, fullName, hashedPassword, roleId]
     );
@@ -100,7 +102,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
-    const [userExist] = await dbConnection.query<RowDataPacket[]>(
+    const [userExist] = await db.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.password, ur.name_role AS role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role) WHERE email = ?",
       [req.body.email]
     );
@@ -167,7 +169,7 @@ export const updateUserFullName = async (
     return;
   }
   try {
-    await dbConnection.query("UPDATE user SET fullName = ? WHERE id = ?", [
+    await db.query("UPDATE user SET fullName = ? WHERE id = ?", [
       req.body.fullName,
       req.params.id,
     ]);
@@ -191,7 +193,7 @@ export const updateUserRole = async (
     return;
   }
   try {
-    await dbConnection.query("UPDATE user SET id_role = ? WHERE id = ?", [
+    await db.query("UPDATE user SET id_role = ? WHERE id = ?", [
       req.body.id_role,
       req.params.id,
     ]);
@@ -215,7 +217,7 @@ export const deleteUser = async (
     return;
   }
   try {
-    await dbConnection.query("DELETE FROM user WHERE id = ?", [req.params.id]);
+    await db.query("DELETE FROM user WHERE id = ?", [req.params.id]);
     res.status(200).json({ msg: "Usuario eliminado correctamente" });
   } catch (error) {
     res.status(200).json({ msg: "No se pudo eliminar el usuario", error });
