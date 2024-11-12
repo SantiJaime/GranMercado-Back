@@ -61,7 +61,7 @@ router.patch(
     check(
       "fullName",
       "El nombre completo debe tener un mínimo de 3 caracteres y un máximo de 100"
-    ).isLength({ min: 8, max: 100 }),
+    ).isLength({ min: 3, max: 100 }),
   ],
   updateUserFullName
 );
