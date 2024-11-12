@@ -6,8 +6,16 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "tsx watch ./src/index.ts",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist"
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -26,6 +34,8 @@
     "eslint": "^9.10.0",
     "eslint-plugin-node": "^11.1.0",
     "globals": "^15.9.0",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^6.0.1",
     "tsx": "^4.19.1",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.6.0"
