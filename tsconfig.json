@@ -9,7 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
     "module": "ESNext",
-    "rootDir": "./src", 
+    "rootDir": "./src",
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "types": ["node"],
     "outDir": "./dist",
@@ -17,20 +17,9 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    		// Treat files as modules even if it doesn't use import/export
-		"moduleDetection": "force",
-
-		// Ignore module structure
-
-		// Allow JSON modules to be imported
-		"resolveJsonModule": true,
-
-		// Allow JS files to be imported from TS and vice versa
-		"allowJs": true,
-
-		// Use correct ESM import behavior
-
-		// Disallow features that require cross-file awareness
-		"isolatedModules": true,
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "isolatedModules": true
   }
 }

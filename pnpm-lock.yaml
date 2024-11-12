@@ -48,6 +48,9 @@ importers:
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
+      '@types/express-validator':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@types/jsonwebtoken':
         specifier: ^9.0.7
         version: 9.0.7
@@ -334,6 +337,10 @@ packages:
 
   '@types/express-serve-static-core@5.0.1':
     resolution: {integrity: sha512-CRICJIl0N5cXDONAdlTv5ShATZ4HEwk6kDDIW2/w9qOWKg+NU/5F8wYRWCrONad0/UKkloNSmmyN/wX4rtpbVA==}
+
+  '@types/express-validator@3.0.2':
+    resolution: {integrity: sha512-dV+1u6absDDEIVe5jd5ID1XYvPPvOSvggMWh09VYM3TeBjAjBDtwJWyJg/5PnK7s8FRgbOtHgD6oX3N2MKWwDw==}
+    deprecated: This is a stub types definition. express-validator provides its own type definitions, so you do not need this installed.
 
   '@types/express@5.0.0':
     resolution: {integrity: sha512-DvZriSMehGHL1ZNLzi6MidnsDhUZM/x2pRdDIKdwbUNqqwHxMlRdkxtn6/EPKyqKpHqTl/4nRZsRNLpZxZRpPQ==}
@@ -1722,6 +1729,10 @@ snapshots:
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
+
+  '@types/express-validator@3.0.2':
+    dependencies:
+      express-validator: 7.2.0
 
   '@types/express@5.0.0':
     dependencies:
