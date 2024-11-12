@@ -9,6 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
     "module": "ESNext",
+    "rootDir": "./src", 
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "types": ["node"],
     "outDir": "./dist",
