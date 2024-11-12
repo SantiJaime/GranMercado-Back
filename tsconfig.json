@@ -1,6 +1,6 @@
 {
   "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*.ts"],
+  "include": ["api/**/*.ts"],
   "compilerOptions": {
     "strict": true,
     "moduleResolution": "node",
@@ -9,8 +9,8 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
     "module": "CommonJS",
-    "rootDir": "./src",
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "rootDir": "api",
+    "typeRoots": ["./node_modules/@types", "api/types"],
     "types": ["node"],
     "outDir": "./dist",
     "esModuleInterop": true,
