@@ -5,16 +5,14 @@ import * as bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
 import { generateToken, verifyToken } from "../middleware/jwt.config";
 import { JWT_SECRET_KEY } from "../constants/const";
-import connectToDatabase from "../database/db.config";
-
-const db = await connectToDatabase();
+import pool from "../database/db.config";
 
 export const getAllUsers = async (
   _req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const [allUsers] = await db.query<RowDataPacket[]>(
+    const [allUsers] = await pool.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.fullName, ur.name_role AS role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role)"
     );
     res
@@ -36,7 +34,7 @@ export const getOneUser = async (
     return;
   }
   try {
-    const [oneUser] = await db.query<RowDataPacket[]>(
+    const [oneUser] = await pool.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.fullName, ur.name_role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role) WHERE id = ?",
       [req.params.id]
     );
@@ -65,7 +63,7 @@ export const createUser = async (
 
     const roleId: number = id_role ? id_role : 1;
 
-    const [userExist] = await db.query<RowDataPacket[]>(
+    const [userExist] = await pool.query<RowDataPacket[]>(
       "SELECT * FROM user WHERE email = ?",
       [email]
     );
@@ -77,7 +75,7 @@ export const createUser = async (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.query(
+    await pool.query(
       "INSERT INTO user (email, fullName, password, id_role) VALUES (?, ?, ?, ?)",
       [email, fullName, hashedPassword, roleId]
     );
@@ -102,7 +100,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
-    const [userExist] = await db.query<RowDataPacket[]>(
+    const [userExist] = await pool.query<RowDataPacket[]>(
       "SELECT u.id, u.email, u.password, ur.name_role AS role FROM user u LEFT JOIN user_role ur ON (u.id_role = ur.id_role) WHERE email = ?",
       [req.body.email]
     );
@@ -169,7 +167,7 @@ export const updateUserFullName = async (
     return;
   }
   try {
-    await db.query("UPDATE user SET fullName = ? WHERE id = ?", [
+    await pool.query("UPDATE user SET fullName = ? WHERE id = ?", [
       req.body.fullName,
       req.params.id,
     ]);
@@ -193,7 +191,7 @@ export const updateUserRole = async (
     return;
   }
   try {
-    await db.query("UPDATE user SET id_role = ? WHERE id = ?", [
+    await pool.query("UPDATE user SET id_role = ? WHERE id = ?", [
       req.body.id_role,
       req.params.id,
     ]);
@@ -217,7 +215,7 @@ export const deleteUser = async (
     return;
   }
   try {
-    await db.query("DELETE FROM user WHERE id = ?", [req.params.id]);
+    await pool.query("DELETE FROM user WHERE id = ?", [req.params.id]);
     res.status(200).json({ msg: "Usuario eliminado correctamente" });
   } catch (error) {
     res.status(200).json({ msg: "No se pudo eliminar el usuario", error });
